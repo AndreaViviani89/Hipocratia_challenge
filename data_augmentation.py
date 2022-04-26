@@ -1,12 +1,14 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-import tree_classifier as tr
+import tree_class_aug as tr
 import time
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, confusion_matrix, classification_report
 from sklearn.ensemble import RandomForestClassifier
 
 df = pd.read_csv('heart.csv')
+
+#df['nor_press'] = df['trtbps'] / 120
 
 np.random.seed(0)
 
@@ -19,6 +21,8 @@ def data_aug(df):
         trtbs_mean = ha['trtbps'].std()
         chol_mean = ha['chol'].std()
         thalachh_mean = ha['thalachh'].std()
+        #nor_press_std= ha['nor_press'].std()
+        age_std = ha['age'].std()
             
         for j in dfc[dfc['output'] == sex].index:
             if np.random.randint(2) == 1:
@@ -35,6 +39,15 @@ def data_aug(df):
                 dfc['thalachh'].values[j] += thalachh_mean/10
             else:
                 dfc['thalachh'].values[j] += thalachh_mean/10
+            
+            #if np.random.randint(2) == 1:
+                #dfc['nor_press'].values[j] += nor_press_std/10
+            #else:
+                #dfc['nor_press'].values[j] -= nor_press_std/10
+            if np.random.randint(2) ==1:
+                dfc['age'].values[j] += age_std/10
+            else:
+                dfc['age'].values[j] -= age_std/10
     
     return dfc
 cdf = data_aug(df)
@@ -72,8 +85,8 @@ mod_result = model_results()
 print(mod_result)
 
 
-mod = RandomForestClassifier(random_state=0, max_depth=4, n_estimators=200)
-mod.fit(X_train, y_train)
-prediction1 = mod.predict(X_test)
-print('Confusion matrix',confusion_matrix(y_test,prediction1))
-print('Classification report:', classification_report(y_test, prediction1))
+# mod = RandomForestClassifier(random_state=0, max_depth=4, n_estimators=200)
+# mod.fit(X_train, y_train)
+# prediction1 = mod.predict(X_test)
+# print('Confusion matrix',confusion_matrix(y_test,prediction1))
+# print('Classification report:', classification_report(y_test, prediction1))

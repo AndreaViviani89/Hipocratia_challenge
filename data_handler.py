@@ -147,9 +147,12 @@ Specs       Score
 
 
 # feature generation and feature selection
-#data.drop('fbs', axis = 1, inplace = True)
-#data.drop(164)
+data['nor_press'] = data['trtbps'] / 120
+data.drop('fbs', axis = 1, inplace = True)
+data.drop(164)
 #print(data.sample(10))
+
+
 
 
 
@@ -193,17 +196,17 @@ y = data['output'] # target
 
 
 # numerical and categorical data
-num_vals = ['age', 'trtbps', 'chol', 'thalachh','oldpeak']
-cat_vals = ['sex', 'cp', 'exng', 'fbs', 'restecg', 'slp', 'caa', 'thall']
+num_vals = ['age', 'trtbps', 'chol', 'nor_press', 'thalachh', 'oldpeak']
+cat_vals = ['sex', 'cp', 'exng', 'restecg', 'slp', 'caa', 'thall']
 
 
 
 # split data
 x_train, x_val, y_train, y_val = train_test_split(x, y, test_size = 0.2, random_state = 0)
 
-
+df = x_val.sample(n=6)
 # store data
-x_val.to_csv('data_test.csv', index=False)
+df.to_csv('data_test.csv', index=False)
 
 
 
@@ -296,7 +299,11 @@ joblib.dump(best_model, 'best_model.joblib')
 
 
 
+# create test data
 
+df = data.sample(n=6)
+df = df.drop('output', axis=1)
+df.to_csv('test.csv')
 
 
 

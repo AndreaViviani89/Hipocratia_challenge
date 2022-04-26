@@ -75,7 +75,10 @@ sns.heatmap(data.isnull(),
             )
 #plt.show()
 
-
+plt.figure(figsize = (10, 8))
+sns.countplot(x ='output', data = data, hue = "output")
+plt.title("Distribution of the target variable", fontsize = 20)
+#plt.show()
 
 
 # plot correlation
@@ -253,7 +256,7 @@ for model_name, model in classifiers.items():
 
     model.fit(x_train, y_train)
 
-    predics = model.predict(x_val)
+    predics = model.predict(x_val) 
     total_time = time.time() - start_time
     
 
@@ -274,7 +277,7 @@ print(results_order)
 # final model
 def predictor(features):
 
-    best_model = classifiers.get("Extra Trees")
+    best_model = classifiers.get("Ada Boost")
 
     best_model.fit(x_train, y_train)
 

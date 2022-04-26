@@ -2,6 +2,7 @@ import joblib
 from data_handler import predictor
 import pandas as pd
 from joblib import load
+import argparse
 
 model = joblib.load('best_model.joblib')
 
@@ -36,6 +37,28 @@ if pred == 1:
 else:
     print("No risk of heart attack")
     
+
+
+
+
+# Test with argparse
+
+arg_parse = argparse.ArgumentParser(description= 'Heart attack predictor')
+
+arg_parse.add_argument('age', type=int, help='How old are you?')
+arg_parse.add_argument('sex', type=int, choices=[0, 1] , help='Gender? 0 for Female, 1 for Male')
+arg_parse.add_argument('cp', type=int, choices=[1, 2, 3, 4] , help='Chest pain type? 0 for Absent, 1 for light pain, 2 for moderate pain, 3 for extreme pain')
+arg_parse.add_argument('trtbps', type=int, help='Resting blood pressure in mm Hg')
+arg_parse.add_argument('chol', type=int, help='Serum cholestrol in mg/dl')
+arg_parse.add_argument('fbs', type=int, choices=[0, 1] , help='Fasting Blood Sugar? 0 for < 120 mg/dl, 1 for > 120 mg/dl')
+arg_parse.add_argument('restecg', type=int, choices=[0, 1, 2] , help='Resting ecg? (0,1,2)')
+arg_parse.add_argument('thalachh', type=int, help='Maximum Heart Rate achieved?')
+arg_parse.add_argument('exng', type=int, choices=[0, 1] , help='Exercise Induced Angina? 0 for no, 1 for yes')
+arg_parse.add_argument('oldpeak', type=float, help='Old Peak? ST Depression induced by exercise relative to rest - Float number')
+arg_parse.add_argument('slp', type=int, choices=[0, 1, 2] , help='Slope of the peak? (0,1,2)')
+arg_parse.add_argument('caa', type=int, choices=[0, 1, 2, 3] , help='Number of colored vessels during Floroscopy? (0,1,2,3)')
+arg_parse.add_argument('thall', type=int, choices=[0, 1, 2, 3] , help='3 = normal; 6 = fixed defect; 7 = reversable defect')
+args = arg_parse.parse_args()
 
 
 

@@ -1,4 +1,5 @@
 from http.client import UnimplementedFileMode
+from pickle import TRUE
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -13,7 +14,6 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 tree_classifiers = tr.tree_classifiers()
 
 def model_results():
-
     results = pd.DataFrame({'Model': [], 'Accuracy': [], 'Bal Acc.': [], 'Time': []})
 
     for model_name, model in tree_classifiers.items():
@@ -35,3 +35,6 @@ def model_results():
     return results_ord
 mod_res = model_results()
 print(mod_res)
+
+
+  

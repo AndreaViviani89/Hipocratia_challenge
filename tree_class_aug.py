@@ -27,7 +27,7 @@ def tree_classifiers():
     "CatBoost": CatBoostClassifier()}
 
     num_vars = ['age','trtbps','chol','thalachh','oldpeak','nor_press']
-    cat_vars = ['sex', 'cp','exng','restecg','exng','slp', 'caa', 'thall']
+    cat_vars = ['sex', 'cp','exng','fbs','restecg','exng','slp', 'caa', 'thall']
 
 
     num_4_treeModels = pipeline.Pipeline(steps=[('scaler', StandardScaler())])

@@ -1,10 +1,12 @@
-from data_handler import predictor
+
 import pandas as pd
 import joblib
-from joblib import load
 
 
-m = load()
+# load file
+model = joblib.load("best_model.joblib")
+
+
 def get_inputs():
 
     input_features = []
@@ -30,28 +32,11 @@ def get_inputs():
 
 
 
-pred = predictor(get_inputs())
+pred = model(get_inputs())
 if pred == 1:
     print("You may have risk of heart attack")
 else:
     print("No risk of heart attack")
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # parser = argparse.ArgumentParser()

@@ -277,22 +277,18 @@ results_order = results.sort_values(by = ['Accuracy Score'], ascending = False, 
 
 
 # final model
-def predictor(features):
+best_model = classifiers.get("Random Forest")
 
-    best_model = classifiers.get("Random Forest")
+best_model.fit(x_train, y_train)
 
-    best_model.fit(x_train, y_train)
-
-    preds = best_model.predict(features)
+preds = best_model.predict(x_val)
     
     
-    return best_model, preds
-predicse = predictor(x_val)
-
+    
 
 
 # Saving model
-joblib.dump(predicse[0], 'model.joblib')
+joblib.dump(best_model, 'best_model.joblib')
 
 
 

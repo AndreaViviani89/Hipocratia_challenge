@@ -12,7 +12,7 @@ def get_inputs():
     cp = int(input("Chest pain type? 0 for Absent, 1 for light pain, 2 for moderate pain, 3 for extreme pain \n"))
     trtbps = int(input("Resting blood pressure in mm Hg \n"))
     chol = int(input("Serum cholestrol in mg/dl \n"))
-    #fbs = int(input("Fasting Blood Sugar? 0 for < 120 mg/dl, 1 for > 120 mg/dl \n"))
+    fbs = int(input("Fasting Blood Sugar? 0 for < 120 mg/dl, 1 for > 120 mg/dl \n"))
     restecg = int(input("Resting ecg? (0,1,2) \n"))
     thalachh = int(input("Maximum Heart Rate achieved? \n"))
     exng = int(input("Exercise Induced Angina? 0 for no, 1 for yes \n"))
@@ -21,19 +21,35 @@ def get_inputs():
     caa = int(input("Number of colored vessels during Floroscopy? (0,1,2,3) \n"))
     thall = int(input("thal: 3 = normal; 6 = fixed defect; 7 = reversable defect \n"))
 
-    input_features.append([age, sex, cp, trtbps, chol, restecg, thalachh, exng, oldpeak, slp, caa, thall])
+    input_features.append([age, sex, cp, trtbps, chol, fbs, restecg, thalachh, exng, oldpeak, slp, caa, thall])
 
-    return pd.DataFrame(input_features, columns=['age', 'sex', 'cp', 'trtbps', 'chol', 'restecg', 'thalachh', 'exng', 'oldpeak', 'slp', 'caa', 'thall'])
+    return pd.DataFrame(input_features, columns=['age', 'sex', 'cp', 'trtbps', 'chol', 'fbs', 'restecg', 'thalachh', 'exng', 'oldpeak', 'slp', 'caa', 'thall'])
 
 
 
 
 pred = predictor(get_inputs())
 if pred == 1:
-    print("You may have risk of heart attack...Please take your drugs only for 3times!!!")
+    print("You may have risk of heart attack")
 else:
     print("No risk of heart attack")
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # parser = argparse.ArgumentParser()

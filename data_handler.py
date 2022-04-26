@@ -145,8 +145,8 @@ Specs       Score
 
 
 # feature generation and feature selection
-data.drop('fbs', axis = 1, inplace = True)
-data.drop(164)
+#data.drop('fbs', axis = 1, inplace = True)
+#data.drop(164)
 #print(data.sample(10))
 
 
@@ -193,7 +193,7 @@ y = data['output'] # target
 
 # numerical and categorical data
 num_vals = ['age', 'trtbps', 'chol', 'thalachh','oldpeak']
-cat_vals = ['sex', 'cp', 'exng', 'restecg', 'slp', 'caa', 'thall']
+cat_vals = ['sex', 'cp', 'exng', 'fbs', 'restecg', 'slp', 'caa', 'thall']
 
 
 
@@ -268,7 +268,7 @@ for model_name, model in classifiers.items():
 
 results_order = results.sort_values(by = ['Accuracy Score'], ascending = False, ignore_index = True)
 
-print(results_order)
+#print(results_order)
 
 
 
@@ -277,7 +277,7 @@ print(results_order)
 # final model
 def predictor(features):
 
-    best_model = classifiers.get("Ada Boost")
+    best_model = classifiers.get("Random Forest")
 
     best_model.fit(x_train, y_train)
 

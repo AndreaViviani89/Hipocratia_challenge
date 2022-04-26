@@ -71,14 +71,14 @@ sns.heatmap(data.isnull(),
             cbar = False,
             cmap = 'PuBu_r',
             )
-#plt.show()
+plt.show()
 
 
 
 
 # plot correlation
 data.corr()['output'].abs().sort_values().plot.barh()
-#plt.show()
+plt.show()
 
 
 # correlation matrix values
@@ -228,7 +228,7 @@ for model_name, model in classifiers.items():
     results = results.append({"Model": model_name,
                             "Accuracy Score": accuracy_score(y_val, predics)*100,
                             "Balanced Accuracy score": balanced_accuracy_score(y_val, predics)*100,
-                            "Time": total_time}, ignore_index=True)
+                            "Time": total_time}, ignore_index = True)
 
 results_order = results.sort_values(by = ['Accuracy Score'], ascending = False, ignore_index = True)
 

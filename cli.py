@@ -1,10 +1,10 @@
-from data_handler import predictor
+
 import pandas as pd
 import joblib
 from joblib import load
 
 
-m = load()
+m = load("C:\\Users\\ritth\\code\\Strive\\Hipocratia_challenge\\image\\best_model.joblib")
 def get_inputs():
 
     input_features = []
@@ -30,7 +30,7 @@ def get_inputs():
 
 
 
-pred = predictor(get_inputs())
+pred = m(get_inputs())
 if pred == 1:
     print("You may have risk of heart attack")
 else:

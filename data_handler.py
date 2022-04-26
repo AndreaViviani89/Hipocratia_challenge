@@ -71,14 +71,14 @@ sns.heatmap(data.isnull(),
             cbar = False,
             cmap = 'PuBu_r',
             )
-plt.show()
+#plt.show()
 
 
 
 
 # plot correlation
 data.corr()['output'].abs().sort_values().plot.barh()
-plt.show()
+#plt.show()
 
 
 # correlation matrix values
@@ -111,7 +111,8 @@ output      1.000000
 #data['oldpeak'] = data['oldpeak'].apply(lambda x: 1 if x > 1.6 else 0)
 
 data.drop('fbs', axis = 1, inplace = True)
-data.drop('restecg', axis = 1, inplace = True)
+#data.drop('restecg', axis = 1, inplace = True)
+data.drop(164)
 #print(data.sample(10))
 
 
@@ -158,7 +159,7 @@ y = data['output'] # target
 
 # numerical and categorical data
 num_vals = ['age', 'trtbps', 'chol', 'thalachh','oldpeak']
-cat_vals = ['sex', 'cp', 'exng', 'slp', 'caa', 'thall']
+cat_vals = ['sex', 'cp', 'exng', 'restecg', 'slp', 'caa', 'thall']
 
 
 

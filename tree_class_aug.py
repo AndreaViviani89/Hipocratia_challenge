@@ -12,13 +12,13 @@ from sklearn import impute
 from sklearn import pipeline
 from sklearn import compose
 from sklearn.preprocessing import OrdinalEncoder, StandardScaler
-
+from pandas import MultiIndex, Int64Index
 
 def tree_classifiers():
     tree_classifiers = {
     "Decision Tree": DecisionTreeClassifier(),
     "Extra Trees": ExtraTreesClassifier(),
-    "Random Forest": RandomForestClassifier(random_state=0, max_depth=4, n_estimators=200),
+    "Random Forest": RandomForestClassifier(),
     "AdaBoost": AdaBoostClassifier(),
     "Skl GBM": GradientBoostingClassifier(),
     "Skl HistGBM":HistGradientBoostingClassifier(),
@@ -26,7 +26,7 @@ def tree_classifiers():
     "LightGBM": LGBMClassifier(),
     "CatBoost": CatBoostClassifier()}
 
-    num_vars = ['age','trtbps','chol','thalachh','oldpeak']
+    num_vars = ['age','trtbps','chol','thalachh','oldpeak','nor_press']
     cat_vars = ['sex', 'cp','exng','restecg','exng','slp', 'caa', 'thall']
 
 

@@ -4,11 +4,12 @@ from sklearn.model_selection import train_test_split
 import tree_class_aug as tr
 import time
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, confusion_matrix, classification_report
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import ExtraTreesClassifier, RandomForestClassifier
+from sklearn.model_selection import GridSearchCV
 
 df = pd.read_csv('heart.csv')
 
-#df['nor_press'] = df['trtbps'] / 120
+df['nor_press'] = df['trtbps'] / 120
 
 np.random.seed(0)
 
@@ -41,9 +42,9 @@ def data_aug(df):
                 dfc['thalachh'].values[j] += thalachh_mean/10
             
             #if np.random.randint(2) == 1:
-                #dfc['nor_press'].values[j] += nor_press_std/10
+            #    dfc['nor_press'].values[j] += nor_press_std/10
             #else:
-                #dfc['nor_press'].values[j] -= nor_press_std/10
+            #    dfc['nor_press'].values[j] -= nor_press_std/10
             if np.random.randint(2) ==1:
                 dfc['age'].values[j] += age_std/10
             else:
@@ -90,3 +91,22 @@ print(mod_result)
 # prediction1 = mod.predict(X_test)
 # print('Confusion matrix',confusion_matrix(y_test,prediction1))
 # print('Classification report:', classification_report(y_test, prediction1))
+
+model = ExtraTreesClassifier(n_estimators=100, n_jobs=4, min_samples_split=25,
+                            min_samples_leaf=35, max_features=150)
+                            
+gsc = GridSearchCV(
+    estimator=model,
+    param_grid={
+        #'n_estimators': range(50,126,25),
+        'max_features': range(50,401,50),
+        #'min_samples_leaf': range(20,50,5),
+        #'min_samples_split': range(15,36,5),
+    },
+    scoring='r2',
+    cv=5
+)
+
+grid_result = gsc.fit(X_train, y_train)
+
+print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_))

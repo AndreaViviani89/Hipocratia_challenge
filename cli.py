@@ -1,8 +1,10 @@
 from data_handler import predictor
 import pandas as pd
+import joblib
+from joblib import load
 
 
-
+m = load()
 def get_inputs():
 
     input_features = []
@@ -23,7 +25,7 @@ def get_inputs():
 
     input_features.append([age, sex, cp, trtbps, chol, fbs, restecg, thalachh, exng, oldpeak, slp, caa, thall])
 
-    return pd.DataFrame(input_features, columns=['age', 'sex', 'cp', 'trtbps', 'chol', 'fbs', 'restecg', 'thalachh', 'exng', 'oldpeak', 'slp', 'caa', 'thall'])
+    return pd.DataFrame(input_features, columns = ['age', 'sex', 'cp', 'trtbps', 'chol', 'fbs', 'restecg', 'thalachh', 'exng', 'oldpeak', 'slp', 'caa', 'thall'])
 
 
 

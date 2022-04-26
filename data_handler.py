@@ -3,13 +3,15 @@ import pandas   as pd
 import seaborn  as sns
 import matplotlib.pyplot as plt
 import time
+import joblib
+
 
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, balanced_accuracy_score
+from sklearn.metrics import accuracy_score, balanced_accuracy_score, plot_confusion_matrix
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier, AdaBoostClassifier, GradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.pipeline import Pipeline, make_pipeline
@@ -282,13 +284,15 @@ def predictor(features):
     best_model.fit(x_train, y_train)
 
     preds = best_model.predict(features)
+    
+    
+    return best_model, preds
+predicse = predictor(x_val)
 
-    return preds
 
 
-
-
-
+# Saving model
+joblib.dump(predicse[0], 'model.joblib')
 
 
 

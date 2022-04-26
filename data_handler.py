@@ -192,7 +192,6 @@ x = data.drop(['output'], axis = 1) # features - train and val data
 y = data['output'] # target
 
 
-
 # numerical and categorical data
 num_vals = ['age', 'trtbps', 'chol', 'thalachh','oldpeak']
 cat_vals = ['sex', 'cp', 'exng', 'fbs', 'restecg', 'slp', 'caa', 'thall']
@@ -201,6 +200,10 @@ cat_vals = ['sex', 'cp', 'exng', 'fbs', 'restecg', 'slp', 'caa', 'thall']
 
 # split data
 x_train, x_val, y_train, y_val = train_test_split(x, y, test_size = 0.2, random_state = 0)
+
+
+# store data
+x_val.to_csv('data_test.csv', index=False)
 
 
 

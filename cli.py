@@ -5,10 +5,10 @@ from joblib import load
 
 model = joblib.load('best_model.joblib')
 
+
 def get_inputs():
 
     input_features = []
-
     age = int(input("How old are you? \n"))
     sex = int(input("Gender? 0 for Female, 1 for Male \n"))
     cp = int(input("Chest pain type? 0 for Absent, 1 for light pain, 2 for moderate pain, 3 for extreme pain \n"))
@@ -18,7 +18,7 @@ def get_inputs():
     restecg = int(input("Resting ecg? (0,1,2) \n"))
     thalachh = int(input("Maximum Heart Rate achieved? \n"))
     exng = int(input("Exercise Induced Angina? 0 for no, 1 for yes \n"))
-    oldpeak = float(input("Old Peak? ST Depression induced by exercise relative to rest \n"))
+    oldpeak = float(input("Old Peak? ST Depression induced by exercise relative to rest - Float number \n"))
     slp = int(input("Slope of the peak? (0,1,2) \n"))
     caa = int(input("Number of colored vessels during Floroscopy? (0,1,2,3) \n"))
     thall = int(input("thal: 3 = normal; 6 = fixed defect; 7 = reversable defect \n"))

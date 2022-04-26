@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import tree_classifier as tr
 import time
-from sklearn.metrics import accuracy_score, balanced_accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score, balanced_accuracy_score, confusion_matrix, classification_report
 from sklearn.ensemble import RandomForestClassifier
 
 df = pd.read_csv('heart.csv')
@@ -75,4 +75,5 @@ print(mod_result)
 mod = RandomForestClassifier(random_state=0, max_depth=4, n_estimators=200)
 mod.fit(X_train, y_train)
 prediction1 = mod.predict(X_test)
-print(confusion_matrix(y_test,prediction1))
+print('Confusion matrix',confusion_matrix(y_test,prediction1))
+print('Classification report:', classification_report(y_test, prediction1))

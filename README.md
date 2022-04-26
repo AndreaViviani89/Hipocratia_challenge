@@ -3,9 +3,15 @@
 ## Group members:
  #### Andrea     
  #### Ritthuja     
- #### Abu
+ #### Abubakr
 ## Benchmark:
- #### Abu
+ #### Abubakr
 ## EDA:
- 
+ #### Ritthuja     
+ #### Andrea
+## Data Enhancement
+ #### Abubakr      
+ #### Ritthuja
 ## CLI 
+ #### Andrea
+ 

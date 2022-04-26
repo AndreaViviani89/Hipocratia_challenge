@@ -1,7 +1,9 @@
+import joblib
 from data_handler import predictor
 import pandas as pd
+from joblib import load
 
-
+model = joblib.load('best_model.joblib')
 
 def get_inputs():
 

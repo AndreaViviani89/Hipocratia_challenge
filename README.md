@@ -14,6 +14,5 @@
  #### Ritthuja
 ## CLI 
  #### Andrea
-## Powerpoint
- #### Andrea
+
  

@@ -1,3 +1,4 @@
+import joblib
 import numpy    as np
 import pandas   as pd
 import seaborn  as sns
@@ -19,6 +20,7 @@ from lightgbm import LGBMClassifier
 from catboost import CatBoostClassifier
 
 
+from joblib import dump
 
 
 
@@ -57,7 +59,7 @@ from catboost import CatBoostClassifier
 
 
 # read data
-data = pd.read_csv("C:\\Users\\ritth\\code\\Strive\\Strive-Exercises\\Chapter 02\\09. Challenge\\data\\heart.csv")
+data = pd.read_csv("C:/Users/andre/Documents/Strive_repository/Hipocratia_challenge/heart.csv")
 #print("Data Shape: {}".format(data.shape))
 
 np.random.seed(0)
@@ -283,9 +285,15 @@ def predictor(features):
 
     preds = best_model.predict(features)
 
-    return preds
+    return preds, best_model
 
 
+
+
+predicse = predictor(x_val)
+
+
+joblib.dump(predicse[1],'best_model')
 
 
 

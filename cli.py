@@ -1,6 +1,6 @@
 import numpy as np
 from joblib import load
-from data_handler_Sardorbek import predictor
+from data_handler import predictor
 import pandas as pd
 
 

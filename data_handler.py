@@ -108,8 +108,8 @@ output      1.000000
 
 
 # feature generation and feature selection
-data['oldpeak'] = data['oldpeak'].apply(lambda x: 1 if x > 1.6 else 0)
-data.drop('chol', axis = 1, inplace = True)
+#data['oldpeak'] = data['oldpeak'].apply(lambda x: 1 if x > 1.6 else 0)
+
 data.drop('fbs', axis = 1, inplace = True)
 data.drop('restecg', axis = 1, inplace = True)
 #print(data.sample(10))
@@ -124,7 +124,7 @@ def data_enhance(data):
 
     for sex in data['sex'].unique():
         sex_data = org_data[org_data['sex'] == sex]
-        #age_std1 = sex_data['chol'].std()
+        age_std1 = sex_data['chol'].std()
         age_std = sex_data['age'].std()
         trtbps_std = sex_data['trtbps'].std()
         thalachh_std = sex_data['thalachh'].std()
@@ -138,13 +138,14 @@ def data_enhance(data):
                 org_data['trtbps'].values[i] += trtbps_std/10
                 org_data['thalachh'].values[i] += thalachh_std/10
                 org_data['oldpeak'].values[i] += oldpeak_std/10
-                #org_data['chol'].values[i] += age_std1/10
+                org_data['chol'].values[i] += age_std1/10
             else:
                 org_data['age'].values[i] -= age_std/10
                 org_data['trtbps'].values[i] -= trtbps_std/10
                 org_data['thalachh'].values[i] -= thalachh_std/10
                 org_data['oldpeak'].values[i] -= oldpeak_std/10
-                #org_data['chol'].values[i] -= age_std1/10
+                org_data['chol'].values[i] -= age_std1/10
+
     return org_data
 
 
@@ -156,7 +157,7 @@ y = data['output'] # target
 
 
 # numerical and categorical data
-num_vals = ['age', 'trtbps', 'thalachh','oldpeak']
+num_vals = ['age', 'trtbps', 'chol', 'thalachh','oldpeak']
 cat_vals = ['sex', 'cp', 'exng', 'slp', 'caa', 'thall']
 
 
@@ -237,6 +238,17 @@ print(results_order)
 
 
 
+
+# final model
+def predictor(features):
+
+    best_model = classifiers.get("Extra Trees")
+
+    best_model.fit(x_train, y_train)
+
+    preds = best_model.predict(features)
+
+    return preds
 
 
 

@@ -1,3 +1,4 @@
+from pickle import TRUE
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -8,6 +9,7 @@ from sklearn.ensemble import ExtraTreesClassifier, RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 
 df = pd.read_csv('heart.csv')
+
 
 df['nor_press'] = df['trtbps'] / 120
 
@@ -91,22 +93,3 @@ print(mod_result)
 # prediction1 = mod.predict(X_test)
 # print('Confusion matrix',confusion_matrix(y_test,prediction1))
 # print('Classification report:', classification_report(y_test, prediction1))
-
-model = ExtraTreesClassifier(n_estimators=100, n_jobs=4, min_samples_split=25,
-                            min_samples_leaf=35, max_features=150)
-                            
-gsc = GridSearchCV(
-    estimator=model,
-    param_grid={
-        #'n_estimators': range(50,126,25),
-        'max_features': range(50,401,50),
-        #'min_samples_leaf': range(20,50,5),
-        #'min_samples_split': range(15,36,5),
-    },
-    scoring='r2',
-    cv=5
-)
-
-grid_result = gsc.fit(X_train, y_train)
-
-print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_))

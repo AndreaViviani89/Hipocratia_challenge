@@ -3,13 +3,15 @@ import pandas   as pd
 import seaborn  as sns
 import matplotlib.pyplot as plt
 import time
+import joblib
+
 
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, balanced_accuracy_score
+from sklearn.metrics import accuracy_score, balanced_accuracy_score, plot_confusion_matrix
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier, AdaBoostClassifier, GradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.pipeline import Pipeline, make_pipeline
@@ -75,7 +77,10 @@ sns.heatmap(data.isnull(),
             )
 #plt.show()
 
-
+plt.figure(figsize = (10, 8))
+sns.countplot(x ='output', data = data, hue = "output")
+plt.title("Distribution of the target variable", fontsize = 20)
+#plt.show()
 
 
 # plot correlation
@@ -142,8 +147,8 @@ Specs       Score
 
 
 # feature generation and feature selection
-data.drop('fbs', axis = 1, inplace = True)
-data.drop(164)
+#data.drop('fbs', axis = 1, inplace = True)
+#data.drop(164)
 #print(data.sample(10))
 
 
@@ -190,7 +195,7 @@ y = data['output'] # target
 
 # numerical and categorical data
 num_vals = ['age', 'trtbps', 'chol', 'thalachh','oldpeak']
-cat_vals = ['sex', 'cp', 'exng', 'restecg', 'slp', 'caa', 'thall']
+cat_vals = ['sex', 'cp', 'exng', 'fbs', 'restecg', 'slp', 'caa', 'thall']
 
 
 
@@ -253,7 +258,7 @@ for model_name, model in classifiers.items():
 
     model.fit(x_train, y_train)
 
-    predics = model.predict(x_val)
+    predics = model.predict(x_val) 
     total_time = time.time() - start_time
     
 
@@ -265,27 +270,25 @@ for model_name, model in classifiers.items():
 
 results_order = results.sort_values(by = ['Accuracy Score'], ascending = False, ignore_index = True)
 
-print(results_order)
+#print(results_order)
 
 
 
 
 
 # final model
-def predictor(features):
+best_model = classifiers.get("Random Forest")
 
-    best_model = classifiers.get("Extra Trees")
+best_model.fit(x_train, y_train)
 
-    best_model.fit(x_train, y_train)
-
-    preds = best_model.predict(features)
-
-    return preds
-
+preds = best_model.predict(x_val)
+    
+    
+    
 
 
-
-
+# Saving model
+joblib.dump(best_model, 'best_model.joblib')
 
 
 

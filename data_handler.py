@@ -1,16 +1,17 @@
-import joblib
 import numpy    as np
 import pandas   as pd
 import seaborn  as sns
 import matplotlib.pyplot as plt
 import time
+import joblib
+
 
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, balanced_accuracy_score
+from sklearn.metrics import accuracy_score, balanced_accuracy_score, plot_confusion_matrix
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier, AdaBoostClassifier, GradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.pipeline import Pipeline, make_pipeline
@@ -20,7 +21,6 @@ from lightgbm import LGBMClassifier
 from catboost import CatBoostClassifier
 
 
-from joblib import dump
 
 
 
@@ -59,7 +59,7 @@ from joblib import dump
 
 
 # read data
-data = pd.read_csv("C:/Users/andre/Documents/Strive_repository/Hipocratia_challenge/heart.csv")
+data = pd.read_csv("C:\\Users\\ritth\\code\\Strive\\Strive-Exercises\\Chapter 02\\09. Challenge\\data\\heart.csv")
 #print("Data Shape: {}".format(data.shape))
 
 np.random.seed(0)
@@ -277,26 +277,18 @@ results_order = results.sort_values(by = ['Accuracy Score'], ascending = False, 
 
 
 # final model
-def predictor(features):
+best_model = classifiers.get("Random Forest")
 
-    best_model = classifiers.get("Random Forest")
+best_model.fit(x_train, y_train)
 
-    best_model.fit(x_train, y_train)
-
-    preds = best_model.predict(features)
-
-    return preds, best_model
-
+preds = best_model.predict(x_val)
+    
+    
+    
 
 
-
-predicse = predictor(x_val)
-
-
-joblib.dump(predicse[1],'best_model')
-
-
-
+# Saving model
+joblib.dump(best_model, 'best_model.joblib')
 
 
 

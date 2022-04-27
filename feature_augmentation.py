@@ -1,16 +1,15 @@
-from http.client import UnimplementedFileMode
-from pickle import TRUE
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-import tree_classifier as tr
+import tree_class_aug as tr
 import time
 from sklearn.metrics import accuracy_score, balanced_accuracy_score
 
 df = pd.read_csv('heart.csv')
+df['nor_press'] = df['trtbps'] / 120
 X,y = df.drop(['output'], axis=1), df['output']
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0 ,shuffle=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0,shuffle=True)
 tree_classifiers = tr.tree_classifiers()
 
 def model_results():
@@ -35,6 +34,3 @@ def model_results():
     return results_ord
 mod_res = model_results()
 print(mod_res)
-
-
-  

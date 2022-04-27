@@ -25,7 +25,7 @@ def tree_classifiers():
     "XGBoost": XGBClassifier(),
     "LightGBM": LGBMClassifier(),
     "CatBoost": CatBoostClassifier()}
-
+#criterion='entropy', max_depth=4, n_estimators=91,random_state=42
     num_vars = ['age','trtbps','chol','thalachh','oldpeak','nor_press']
     cat_vars = ['sex', 'cp','exng','fbs','restecg','exng','slp', 'caa', 'thall']
 

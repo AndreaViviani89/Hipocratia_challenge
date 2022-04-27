@@ -19,34 +19,29 @@ def data_aug(df):
     
     dfc = df.copy()
 
-    for sex in dfc['output'].unique():
-        ha = dfc[dfc['output'] == sex]
-        trtbs_mean = ha['trtbps'].std()
-        chol_mean = ha['chol'].std()
-        thalachh_mean = ha['thalachh'].std()
-        #nor_press_std= ha['nor_press'].std()
+    for out in dfc['output'].unique():
+        ha = dfc[dfc['output'] == out]
+        trtbs_std = ha['trtbps'].std()
+        chol_std = ha['chol'].std()
+        thalachh_std = ha['thalachh'].std()
         age_std = ha['age'].std()
             
-        for j in dfc[dfc['output'] == sex].index:
+        for j in dfc[dfc['output'] == out].index:
             if np.random.randint(2) == 1:
-                dfc['trtbps'].values[j] +=trtbs_mean/10
+                dfc['trtbps'].values[j] +=trtbs_std/10
             else:
-                dfc['trtbps'].values[j] -= trtbs_mean/10
+                dfc['trtbps'].values[j] -= trtbs_std/10
 
             if np.random.randint(2) == 1:
-                dfc['chol'].values[j] += chol_mean/10
+                dfc['chol'].values[j] += chol_std/10
             else:
-                dfc['chol'].values[j] -= chol_mean/10
+                dfc['chol'].values[j] -= chol_std/10
 
             if np.random.randint(2) == 1:
-                dfc['thalachh'].values[j] += thalachh_mean/10
+                dfc['thalachh'].values[j] += thalachh_std/10
             else:
-                dfc['thalachh'].values[j] += thalachh_mean/10
+                dfc['thalachh'].values[j] += thalachh_std/10
             
-            #if np.random.randint(2) == 1:
-            #    dfc['nor_press'].values[j] += nor_press_std/10
-            #else:
-            #    dfc['nor_press'].values[j] -= nor_press_std/10
             if np.random.randint(2) ==1:
                 dfc['age'].values[j] += age_std/10
             else:
@@ -93,3 +88,7 @@ print(mod_result)
 # prediction1 = mod.predict(X_test)
 # print('Confusion matrix',confusion_matrix(y_test,prediction1))
 # print('Classification report:', classification_report(y_test, prediction1))
+# from sklearn.metrics import plot_confusion_matrix, confusion_matrix, classification_report, recall_score
+# import matplotlib.pyplot as plt
+# plot_confusion_matrix(tree_classifiers["Extra Trees"], X_test, y_test,cmap="RdPu")
+# plt.show()

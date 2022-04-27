@@ -3,19 +3,23 @@ import pandas   as pd
 import seaborn  as sns
 import matplotlib.pyplot as plt
 import time
+import joblib
 
-from sklearn.preprocessing import StandardScaler, OrdinalEncoder
+
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2
+from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, balanced_accuracy_score
-from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier, AdaBoostClassifier, GradientBoostingClassifier, HistGradientBoostingClassifier
+from sklearn.metrics import accuracy_score, balanced_accuracy_score, plot_confusion_matrix
+from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier, AdaBoostClassifier, GradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.compose import ColumnTransformer
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
 from catboost import CatBoostClassifier
-from sklearn.impute import SimpleImputer
+
 
 
 
@@ -73,7 +77,10 @@ sns.heatmap(data.isnull(),
             )
 #plt.show()
 
-
+plt.figure(figsize = (10, 8))
+sns.countplot(x ='output', data = data, hue = "output")
+plt.title("Distribution of the target variable", fontsize = 20)
+#plt.show()
 
 
 # plot correlation
@@ -101,17 +108,47 @@ output      1.000000
 
 
 
+# select best feature
+data = data.copy()
+x = data.drop(['output'], axis = 1) # features - train and val data
+y = data['output'] # target
 
-# Take a look at nulls 0 nulls
-#print(data.isnull().sum()) 
+
+# apply SelectKBest class to extract top best features
+bestfeatures = SelectKBest(score_func = chi2, k = 10)
+fit = bestfeatures.fit(x,y)
+dfscores = pd.DataFrame(fit.scores_)
+dfcolumns = pd.DataFrame(x.columns) 
+featureScores = pd.concat([dfcolumns, dfscores], axis = 1)
+featureScores.columns = ['Specs', 'Score']  
+#print(featureScores.nlargest(15, 'Score'))  
+
+
+
+"""
+Specs       Score
+7   thalachh  188.320472
+13    output  138.000000
+9    oldpeak   72.644253
+11       caa   66.440765
+2         cp   62.598098
+8       exng   38.914377
+4       chol   23.936394
+0        age   23.286624
+3     trtbps   14.823925
+10       slp    9.804095
+1        sex    7.576835
+12     thall    5.791853
+6    restecg    2.978271
+5        fbs    0.202934
+"""
+
 
 
 
 # feature generation and feature selection
-data['oldpeak'] = data['oldpeak'].apply(lambda x: 1 if x > 1.6 else 0)
-data.drop('chol', axis = 1, inplace = True)
-data.drop('fbs', axis = 1, inplace = True)
-data.drop('restecg', axis = 1, inplace = True)
+#data.drop('fbs', axis = 1, inplace = True)
+#data.drop(164)
 #print(data.sample(10))
 
 
@@ -124,7 +161,7 @@ def data_enhance(data):
 
     for sex in data['sex'].unique():
         sex_data = org_data[org_data['sex'] == sex]
-        #age_std1 = sex_data['chol'].std()
+        age_std1 = sex_data['chol'].std()
         age_std = sex_data['age'].std()
         trtbps_std = sex_data['trtbps'].std()
         thalachh_std = sex_data['thalachh'].std()
@@ -138,13 +175,14 @@ def data_enhance(data):
                 org_data['trtbps'].values[i] += trtbps_std/10
                 org_data['thalachh'].values[i] += thalachh_std/10
                 org_data['oldpeak'].values[i] += oldpeak_std/10
-                #org_data['chol'].values[i] += age_std1/10
+                org_data['chol'].values[i] += age_std1/10
             else:
                 org_data['age'].values[i] -= age_std/10
                 org_data['trtbps'].values[i] -= trtbps_std/10
                 org_data['thalachh'].values[i] -= thalachh_std/10
                 org_data['oldpeak'].values[i] -= oldpeak_std/10
-                #org_data['chol'].values[i] -= age_std1/10
+                org_data['chol'].values[i] -= age_std1/10
+
     return org_data
 
 
@@ -156,8 +194,8 @@ y = data['output'] # target
 
 
 # numerical and categorical data
-num_vals = ['age', 'trtbps', 'thalachh','oldpeak']
-cat_vals = ['sex', 'cp', 'exng', 'slp', 'caa', 'thall']
+num_vals = ['age', 'trtbps', 'chol', 'thalachh','oldpeak']
+cat_vals = ['sex', 'cp', 'exng', 'fbs', 'restecg', 'slp', 'caa', 'thall']
 
 
 
@@ -220,7 +258,7 @@ for model_name, model in classifiers.items():
 
     model.fit(x_train, y_train)
 
-    predics = model.predict(x_val)
+    predics = model.predict(x_val) 
     total_time = time.time() - start_time
     
 
@@ -228,11 +266,29 @@ for model_name, model in classifiers.items():
     results = results.append({"Model": model_name,
                             "Accuracy Score": accuracy_score(y_val, predics)*100,
                             "Balanced Accuracy score": balanced_accuracy_score(y_val, predics)*100,
-                            "Time": total_time}, ignore_index=True)
+                            "Time": total_time}, ignore_index = True)
 
 results_order = results.sort_values(by = ['Accuracy Score'], ascending = False, ignore_index = True)
 
-print(results_order)
+#print(results_order)
+
+
+
+
+
+# final model
+best_model = classifiers.get("Random Forest")
+
+best_model.fit(x_train, y_train)
+
+preds = best_model.predict(x_val)
+    
+    
+    
+
+
+# Saving model
+joblib.dump(best_model, 'best_model.joblib')
 
 
 
@@ -241,99 +297,3 @@ print(results_order)
 
 
 
-
-
-
-
-
-
-
-
-
-# STD
-"""
-                 Model  Accuracy Score  Balanced Accuracy score      Time
-0          Extra Trees       93.442623                93.355120  0.106715
-1        Random Forest       90.163934                90.032680  0.180518
-2            Ada Boost       90.163934                90.413943  0.082954
-3    Gradient Boosting       88.524590                88.562092  0.082810
-4             Catboost       88.524590                88.562092  2.056365
-5              XGBoost       86.885246                87.091503  0.111737
-6             LightGBM       86.885246                87.091503  0.083491
-7  Logistic Regression       86.885246                86.328976  0.022185
-8        Decision Tree       77.049180                77.505447  0.020820
-"""
-
-# MEAN
-"""
-                 Model  Accuracy Score  Balanced Accuracy score      Time
-0          Extra Trees       93.442623                93.736383  0.109719
-1        Random Forest       91.803279                91.503268  0.185502
-2    Gradient Boosting       91.803279                91.884532  0.082811
-3             Catboost       91.803279                91.503268  2.230707
-4        Decision Tree       88.524590                88.180828  0.012965
-5              XGBoost       88.524590                88.180828  0.114693
-6             LightGBM       88.524590                88.180828  0.075797
-7  Logistic Regression       86.885246                86.328976  0.019947
-8            Ada Boost       85.245902                85.239651  0.076826
-"""
-# MEDIAN
-"""
-                 Model  Accuracy Score  Balanced Accuracy score      Time
-0            Ada Boost       91.803279                91.503268  0.088764
-1        Random Forest       86.885246                87.091503  0.178659
-2          Extra Trees       86.885246                86.710240  0.107744
-3              XGBoost       86.885246                86.710240  0.112697
-4             Catboost       86.885246                86.710240  2.147449
-5    Gradient Boosting       85.245902                85.239651  0.087765
-6             LightGBM       85.245902                85.239651  0.076795
-7  Logistic Regression       83.606557                83.006536  0.017951
-8        Decision Tree       78.688525                78.976035  0.012965
-"""
-
-# Without enhancement
-"""
-                 Model  Accuracy Score  Balanced Accuracy score      Time
-0          Extra Trees       85.245902                84.477124  0.112150
-1  Logistic Regression       85.245902                84.477124  0.030931
-2            Ada Boost       83.606557                83.006536  0.078821
-3             Catboost       83.606557                82.625272  2.205500
-4        Random Forest       80.327869                79.302832  0.189494
-5    Gradient Boosting       78.688525                78.213508  0.082811
-6              XGBoost       78.688525                77.832244  0.111701
-7        Decision Tree       75.409836                76.416122  0.013963
-8             LightGBM       75.409836                74.891068  0.070812
-"""
-
-
-# after add feature
-
-"""
-                Model  Accuracy Score  Balanced Accuracy score      Time
-0        Random Forest       91.803279                91.884532  0.255021
-1    Gradient Boosting       91.803279                91.884532  0.137404
-2             Catboost       91.803279                91.884532  3.175197
-3            Ada Boost       90.163934                90.032680  0.147018
-4  Logistic Regression       90.163934                90.032680  0.091564
-5          Extra Trees       88.524590                88.562092  0.207016
-6             LightGBM       88.524590                88.943355  0.102990
-7              XGBoost       86.885246                87.472767  0.156011
-8        Decision Tree       83.606557                83.387800  0.033862
-"""
-
-
-
-# after feature selection
-
-"""
-                Model  Accuracy Score  Balanced Accuracy score      Time
-0  Logistic Regression       91.803279                91.884532  0.039007
-1          Extra Trees       90.163934                90.413943  0.156297
-2    Gradient Boosting       90.163934                90.795207  0.109625
-3             LightGBM       90.163934                90.795207  0.044105
-4             Catboost       90.163934                90.795207  2.726169
-5        Random Forest       86.885246                87.091503  0.219036
-6              XGBoost       86.885246                87.854031  0.113341
-7            Ada Boost       85.245902                86.383442  0.109190
-8        Decision Tree       80.327869                81.590414  0.015628
-"""

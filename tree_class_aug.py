@@ -12,7 +12,7 @@ from sklearn import impute
 from sklearn import pipeline
 from sklearn import compose
 from sklearn.preprocessing import OrdinalEncoder, StandardScaler
-
+from pandas import MultiIndex, Int64Index
 
 def tree_classifiers():
     tree_classifiers = {
@@ -25,9 +25,9 @@ def tree_classifiers():
     "XGBoost": XGBClassifier(),
     "LightGBM": LGBMClassifier(),
     "CatBoost": CatBoostClassifier()}
-
-    num_vars = ['age','trtbps','chol','thalachh','oldpeak']
-    cat_vars = ['sex', 'cp','exng','restecg','exng','slp', 'caa', 'thall']
+#criterion='entropy', max_depth=4, n_estimators=91,random_state=42
+    num_vars = ['age','trtbps','chol','thalachh','oldpeak','nor_press']
+    cat_vars = ['sex', 'cp','exng','fbs','restecg','exng','slp', 'caa', 'thall']
 
 
     num_4_treeModels = pipeline.Pipeline(steps=[('scaler', StandardScaler())])

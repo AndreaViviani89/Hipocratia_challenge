@@ -35,6 +35,9 @@ def model_results():
     return results_ord
 mod_res = model_results()
 print(mod_res)
-
+from sklearn.metrics import plot_confusion_matrix, confusion_matrix, classification_report, recall_score
+import matplotlib.pyplot as plt
+plot_confusion_matrix(tree_classifiers["Extra Trees"], X_test, y_test,cmap="RdPu")
+plt.show()
 
   

@@ -18,7 +18,7 @@ def tree_classifiers():
     tree_classifiers = {
     "Decision Tree": DecisionTreeClassifier(),
     "Extra Trees": ExtraTreesClassifier(),
-    "Random Forest": RandomForestClassifier(random_state=0, max_depth=4, n_estimators=200),
+    "Random Forest": RandomForestClassifier(),
     "AdaBoost": AdaBoostClassifier(),
     "Skl GBM": GradientBoostingClassifier(),
     "Skl HistGBM":HistGradientBoostingClassifier(),
